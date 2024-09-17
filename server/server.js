@@ -1,7 +1,8 @@
 // server.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const pagesRoutes = require('./routes/pagesRoutes'); // Adjust path if necessary
+const pagesRoutes = require('./routes/pagesRoutes'); 
+const userRoutes = require('./routes/userRoutes'); 
 const cors = require('cors');
 require('dotenv').config(); // Load .env file
 
@@ -16,8 +17,11 @@ app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
+// Pages Routes
+app.use('/pages', pagesRoutes);
+
 // User Routes
-app.use('/users', pagesRoutes);
+app.use('/users', userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

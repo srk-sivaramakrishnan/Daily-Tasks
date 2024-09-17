@@ -23,7 +23,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseURL}/users/signup`, formData); 
+      const response = await axios.post(`${baseURL}/pages/signup`, formData); 
       setMessage(response.data.message);
       navigate('/signin'); // Redirect to signin after successful signup
     } catch (error) {

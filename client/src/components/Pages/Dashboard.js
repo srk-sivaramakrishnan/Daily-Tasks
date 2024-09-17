@@ -1,26 +1,28 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useParams } from 'react-router-dom';
 import './../../styles/Pages/Dashboard.css';
 
 const Dashboard = () => {
+    const { id } = useParams(); 
+
   return (
     <div className="dashboard-container">
       <nav className="sidenav">
         <ul>
           <li>
-            <Link to="home">Home</Link>
+            <Link to={`/dashboard/${id}/home`}>Home</Link>
           </li>
           <li>
-            <Link to="tasks">Tasks</Link>
+            <Link to={`/dashboard/${id}/tasks`}>Tasks</Link>
           </li>
           <li>
-            <Link to="">Reports</Link>
+            <Link to={`/dashboard/${id}/reports`}>Reports</Link>
           </li>
           <li>
-            <Link to="">Profile</Link>
+            <Link to={`/dashboard/${id}/profile`}>Profile</Link>
           </li>
           <li>
-            <Link to="#">Logout</Link>
+            <Link to={`/dashboard/${id}/logout`}>Logout</Link>
           </li>
         </ul>
       </nav>

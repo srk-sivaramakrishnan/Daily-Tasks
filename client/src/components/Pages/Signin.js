@@ -1,4 +1,3 @@
-// src/components/Signin.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import baseURL from '../../connection/connection';
@@ -22,9 +21,10 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseURL}/users/signin`, formData);
+      const response = await axios.post(`${baseURL}/pages/signin`, formData);
+      const userId = response.data.user.id; // Assuming response contains user info with ID
       setMessage(response.data.message);
-      navigate('/dashboard'); // Redirect to dashboard after successful signin
+      navigate(`/dashboard/${userId}`); // Redirect to the user's dashboard
     } catch (error) {
       setMessage(error.response.data.message || 'Error occurred');
     }
