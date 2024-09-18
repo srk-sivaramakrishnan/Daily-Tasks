@@ -44,14 +44,14 @@ exports.addTask = async (req, res) => {
 };
 
 exports.uploadCSV = async (req, res) => {
-  const userId = req.params.id; // Get user_id from URL
+  const user_id = req.params.id;  // Get user_id from URL
   const filePath = path.join(__dirname, '../uploads/', req.file.filename);
 
   const tasks = [];
 
   fs.createReadStream(filePath)
     .pipe(csv())
-    .on('data', async (row) => {
+    .on('data', (row) => {
       // Check if required fields are present
       if (!row.date || !row.day || !row.from_time || !row.to_time || !row.task) {
         return res.status(400).json({ error: 'Missing required fields in CSV' });
@@ -60,15 +60,9 @@ exports.uploadCSV = async (req, res) => {
       // Convert date format from dd-mm-yyyy to yyyy-mm-dd
       const formattedDate = formatDate(row.date);
 
-      // Validate user_id from URL
-      const isValidUserId = await validateUserId(userId);
-
-      if (!isValidUserId) {
-        return res.status(400).json({ error: `Invalid user_id: ${userId}` });
-      }
-
+      // Add the user_id from URL to the task object
       tasks.push({
-        user_id: userId,
+        user_id,  // Use the user_id from URL
         date: formattedDate,
         day: row.day,
         from_time: row.from_time,
@@ -79,9 +73,9 @@ exports.uploadCSV = async (req, res) => {
     .on('end', async () => {
       try {
         for (const task of tasks) {
-          await userModel.addTask(task);
+          await userModel.addTask(task);  // Add each task with correct user_id
         }
-        fs.unlinkSync(filePath); // Remove file after processing
+        fs.unlinkSync(filePath);  // Remove file after processing
         res.status(200).json({ message: 'Tasks added successfully from CSV' });
       } catch (error) {
         console.error('Error processing CSV file', error);
