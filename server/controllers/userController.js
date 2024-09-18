@@ -1,7 +1,6 @@
-const userModel = require('../models/userModel');
 const csv = require('csv-parser');
-const fs = require('fs');
-const path = require('path');
+const { Readable } = require('stream');
+const userModel = require('../models/userModel');
 
 // Function to format date from dd-mm-yyyy to yyyy-mm-dd
 const formatDate = (dateStr) => {
@@ -15,6 +14,7 @@ const validateUserId = async (userId) => {
   return user.length > 0;
 };
 
+// Controller to get user by ID
 exports.getUserById = async (req, res) => {
   const userId = req.params.id;
   try {
@@ -29,6 +29,7 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+// Controller to add a new task
 exports.addTask = async (req, res) => {
   const { user_id, date, day, from_time, to_time, task } = req.body;
   try {
@@ -43,13 +44,22 @@ exports.addTask = async (req, res) => {
   }
 };
 
+// Controller to upload CSV with tasks directly from memory
 exports.uploadCSV = async (req, res) => {
   const user_id = req.params.id;  // Get user_id from URL
-  const filePath = path.join(__dirname, '../uploads/', req.file.filename);
 
+  // Check if file is uploaded
+  if (!req.file || !req.file.buffer) {
+    return res.status(400).json({ error: 'No file uploaded or file is empty' });
+  }
+
+  const buffer = req.file.buffer;  // Get the CSV file from memory
   const tasks = [];
 
-  fs.createReadStream(filePath)
+  // Convert the buffer to stream
+  const stream = Readable.from(buffer.toString());
+
+  stream
     .pipe(csv())
     .on('data', (row) => {
       // Check if required fields are present
@@ -60,9 +70,9 @@ exports.uploadCSV = async (req, res) => {
       // Convert date format from dd-mm-yyyy to yyyy-mm-dd
       const formattedDate = formatDate(row.date);
 
-      // Add the user_id from URL to the task object
+      // Push the task to the tasks array
       tasks.push({
-        user_id,  // Use the user_id from URL
+        user_id,  // Use the user_id from the URL
         date: formattedDate,
         day: row.day,
         from_time: row.from_time,
@@ -71,15 +81,19 @@ exports.uploadCSV = async (req, res) => {
       });
     })
     .on('end', async () => {
+      // After reading all the data, insert tasks into the database
       try {
         for (const task of tasks) {
-          await userModel.addTask(task);  // Add each task with correct user_id
+          await userModel.addTask(task);  // Add each task to the database
         }
-        fs.unlinkSync(filePath);  // Remove file after processing
         res.status(200).json({ message: 'Tasks added successfully from CSV' });
       } catch (error) {
         console.error('Error processing CSV file', error);
         res.status(500).json({ error: 'Error processing CSV file' });
       }
+    })
+    .on('error', (err) => {
+      console.error('Error reading CSV file', err);
+      res.status(500).json({ error: 'Error reading CSV file' });
     });
 };

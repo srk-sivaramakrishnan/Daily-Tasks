@@ -2,10 +2,11 @@ const express = require('express');
 const userController = require('../controllers/userController');
 const multer = require('multer');
 
-const router = express.Router();
+// Set up multer to store files in memory
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-// Set up multer for file uploads
-const upload = multer({ dest: 'uploads/' });
+const router = express.Router();
 
 // Route to get user by ID
 router.get('/profile/:id', userController.getUserById);
