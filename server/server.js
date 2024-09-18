@@ -1,32 +1,25 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const pagesRoutes = require('./routes/pagesRoutes'); 
 const userRoutes = require('./routes/userRoutes'); 
-const cors = require('cors');
-require('dotenv').config(); // Load .env file
+require('dotenv').config();
 
 const app = express();
 
-// Allow requests from your frontend domain only
-const allowedOrigins = ['https://daily-tasks-frontend.vercel.app'];
-app.use(cors({
-  origin: function (origin, callback) {
-    // Check if the request origin is in the allowed origins list
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true, // If you need to allow credentials like cookies
-}));
+// CORS configuration
+app.use(cors());
+app.options('*', cors());
 
-// Middleware
-app.use(bodyParser.json());
+// Body Parser middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Test Route to verify server is working
-app.get('/', (req, res) => {
-  res.send('Server is running');
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log('Request URL:', req.url);
+  console.log('Request Method:', req.method);
+  next();
 });
 
 // Pages Routes
@@ -35,15 +28,10 @@ app.use('/pages', pagesRoutes);
 // User Routes
 app.use('/users', userRoutes);
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
 
-// Start server
-const PORT = process.env.SERVER_PORT || 5000;
+// Start the server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Connected to Database Successfully Buddy....!`);
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`Connected to Database Successfully`); // Ensure you have actual DB connection setup
 });
