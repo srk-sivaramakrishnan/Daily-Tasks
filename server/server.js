@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const pagesRoutes = require('./routes/pagesRoutes'); 
@@ -8,9 +7,22 @@ require('dotenv').config(); // Load .env file
 
 const app = express();
 
+// Allow requests from your frontend domain only
+const allowedOrigins = ['https://daily-tasks-frontend.vercel.app'];
+app.use(cors({
+  origin: function (origin, callback) {
+    // Check if the request origin is in the allowed origins list
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // If you need to allow credentials like cookies
+}));
+
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
 
 // Test Route to verify server is working
 app.get('/', (req, res) => {
@@ -33,5 +45,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.SERVER_PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Connected to Database Successfully Buddy....!`)
+  console.log(`Connected to Database Successfully Buddy....!`);
 });
