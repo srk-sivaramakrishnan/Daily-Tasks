@@ -1,39 +1,13 @@
+const taskModel = require('../models/taskModel');
 const csv = require('csv-parser');
 const { Readable } = require('stream');
-const userModel = require('../models/userModel');
 
-// Function to format date from dd-mm-yyyy to yyyy-mm-dd
-const formatDate = (dateStr) => {
-  const [day, month, year] = dateStr.split('-');
-  return `${year}-${month}-${day}`;
-};
 
-// Function to validate user ID
-const validateUserId = async (userId) => {
-  const user = await userModel.findUserById(userId);
-  return user.length > 0;
-};
-
-// Controller to get user by ID
-exports.getUserById = async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const user = await userModel.findUserById(userId);
-    if (user.length > 0) {
-      res.status(200).json({ username: user[0].name });
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
-};
-
-// Controller to add a new task
+// Existing controller to add a new task
 exports.addTask = async (req, res) => {
   const { user_id, date, day, from_time, to_time, task } = req.body;
   try {
-    const result = await userModel.addTask({ user_id, date, day, from_time, to_time, task });
+    const result = await taskModel.addTask({ user_id, date, day, from_time, to_time, task });
     res.status(201).json({ message: 'Task added successfully', taskId: result.insertId });
   } catch (error) {
     if (error.code === 'ER_DUP_ENTRY') {
@@ -44,7 +18,13 @@ exports.addTask = async (req, res) => {
   }
 };
 
-// Controller to upload CSV with tasks directly from memory
+// Existing function to format date from dd-mm-yyyy to yyyy-mm-dd
+const formatDate = (dateStr) => {
+  const [day, month, year] = dateStr.split('-');
+  return `${year}-${month}-${day}`;
+};
+
+// Existing controller to upload CSV with tasks directly from memory
 exports.uploadCSV = async (req, res) => {
   const user_id = req.params.id;  // Get user_id from URL
 
@@ -84,7 +64,7 @@ exports.uploadCSV = async (req, res) => {
       // After reading all the data, insert tasks into the database
       try {
         for (const task of tasks) {
-          await userModel.addTask(task);  // Add each task to the database
+          await taskModel.addTask(task);  // Add each task to the database
         }
         res.status(200).json({ message: 'Tasks added successfully from CSV' });
       } catch (error) {
@@ -96,4 +76,38 @@ exports.uploadCSV = async (req, res) => {
       console.error('Error reading CSV file', err);
       res.status(500).json({ error: 'Error reading CSV file' });
     });
+};
+
+// New controller to get all tasks by user_id
+exports.getAllTasksByUser = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const tasks = await taskModel.getAllTasksByUser(user_id);
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// New controller to update a task
+exports.updateTask = async (req, res) => {
+  const { id } = req.params;
+  const { from_time, to_time, task } = req.body;
+  try {
+    await taskModel.updateTask(id, { from_time, to_time, task });
+    res.status(200).json({ message: 'Task updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// New controller to delete a task
+exports.deleteTask = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await taskModel.deleteTask(id);
+    res.status(200).json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
 };

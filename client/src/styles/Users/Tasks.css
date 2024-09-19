@@ -1,108 +1,170 @@
-/* Modal Background */
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Modal Content */
-  .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 700px;
-    position: relative;
-  }
-  
-  /* Close Button */
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  
-  /* Form Styles */
-  input, textarea {
-    width: 95%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  /* Submit Button */
-  button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #45a049;
-  }
-  
-  /* Add Task Button */
-  .add-task-btn {
-    background-color: #007BFF;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .add-task-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Bulk Task Link Button */
-  .bulk-link-btn {
-    background: none;
-    border: none;
-    color: #007bff;
-    text-decoration: underline;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .bulk-link-btn:hover {
-    text-decoration: none;
-  }
-  
-  /* Bulk Upload Modal Actions */
-  .bulk-upload-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  /* Bulk Action Buttons */
-  .bulk-action-btn {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .bulk-action-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* File Input */
-  .bulk-upload-file {
-    margin: 0 20px;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 700px;
+  position: relative;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Form Styles */
+input, textarea {
+  width: 95%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Submit Button */
+button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Add Task Button */
+.add-task-btn {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute; /* Positioning it relative to its nearest positioned ancestor */
+  right: 20px; /* Distance from the right edge of its container */
+  top: 20px; /* Distance from the top edge of its container */
+}
+
+.add-task-btn:hover {
+  background-color: #0056b3;
+}
+
+
+/* Bulk Task Link Button */
+.bulk-link-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.bulk-link-btn:hover {
+  text-decoration: none;
+}
+
+/* Bulk Upload Modal Actions */
+.bulk-upload-actions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+/* Bulk Action Buttons */
+.bulk-action-btn {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px; /* Space between buttons */
+}
+
+.bulk-action-btn:hover {
+  background-color: #0056b3;
+}
+
+/* File Input */
+.bulk-upload-file {
+  margin: 0;
+}
+
+.tasks-list {
+  margin-top: 20px;
+  max-height: 500px; /* Adjust the height as needed */
+  overflow-y: auto; /* Allow scrolling */
+}
+
+.task-date-box {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.task-date-box:hover {
+  background-color: #e0f7fa;
+}
+
+.task-date-header {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.task-details-container {
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.task-box {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-box p {
+  margin: 5px 0;
+}
+
+.task-icons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.task-icons .faEdit, .task-icons .faTrash {
+  cursor: pointer;
+  color: #007bff; /* Adjust as needed */
+}
+
+.task-icons .faEdit:hover, .task-icons .faTrash:hover {
+  color: #0056b3; /* Adjust as needed */
+}

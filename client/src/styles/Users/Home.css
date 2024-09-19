@@ -1,0 +1,85 @@
+/* Home page container */
+.home-container {
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #333;
+}
+
+h2 {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #555;
+}
+
+/* Container for tasks */
+.tasks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+/* Individual task box */
+.task-box {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.task-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.task-box p {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.task-box strong {
+    color: #000;
+}
+
+.task-box p:last-child {
+    margin-bottom: 0;
+}
+
+/* Completed task styling */
+.completed-task {
+    background-color: #d4edda!important;
+    border-color: #66bb6a !important;
+    color: black !important;
+}
+
+.completed-task p,
+.completed-task strong {
+    color: black !important;
+}
+
+/* Button for completing tasks */
+.complete-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.complete-btn:hover {
+    background-color: #218838;
+}
+
+.complete-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
