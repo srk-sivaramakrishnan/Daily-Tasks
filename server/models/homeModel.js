@@ -98,7 +98,7 @@ const markIncompleteTasks = async () => {
 };
 
 // Schedule the cron job to run at 11:59 PM every day
-cron.schedule('17 11 * * *', markIncompleteTasks, {
+cron.schedule('19 11 * * *', markIncompleteTasks, {
   timezone: 'Asia/Kolkata', // Specify your timezone
 });
 
