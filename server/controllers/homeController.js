@@ -48,4 +48,3 @@ exports.markTaskAsCompleted = async (req, res) => {
     res.status(500).json({ error: 'Error marking task as completed' });
   }
 };
-  
