@@ -62,32 +62,26 @@ const markTaskCompleted = async (taskId, userId, completedAt, status = 'complete
 // Function to mark incomplete tasks
 const markIncompleteTasks = async () => {
   try {
-    const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-    const now = new Date(); // Current timestamp
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
 
-    // Fetch all tasks for today that are incomplete
-    const [tasks] = await db.execute(
+    // Use pooled connection here
+    const [tasks] = await pool.execute(
       'SELECT id, user_id FROM tasks WHERE isCompleted = ? AND DATE(date) = ?',
       ['0', today]
     );
 
-    console.log(`Found ${tasks.length} incomplete tasks for today (${today}).`);
-
-    // Insert incomplete tasks into completed_tasks table
     for (const task of tasks) {
-      // Check if the task is already in completed_tasks as incomplete to avoid duplication
-      const [existing] = await db.execute(
+      const [existing] = await pool.execute(
         'SELECT id FROM completed_tasks WHERE task_id = ? AND status = ?',
         [task.id, 'incomplete']
       );
       
       if (existing.length === 0) {
-        // Insert into completed_tasks only if not already present
-        await db.execute(
+        await pool.execute(
           'INSERT INTO completed_tasks (task_id, user_id, completed_at, status) VALUES (?, ?, ?, ?)',
           [task.id, task.user_id, now, 'incomplete']
         );
-        console.log(`Marked task ID ${task.id} as incomplete for user ID ${task.user_id}.`);
       }
     }
 
@@ -97,8 +91,10 @@ const markIncompleteTasks = async () => {
   }
 };
 
+
+
 // Schedule the cron job to run at 11:59 PM every day
-cron.schedule('19 11 * * *', markIncompleteTasks, {
+cron.schedule('26 11 * * *', markIncompleteTasks, {
   timezone: 'Asia/Kolkata', // Specify your timezone
 });
 
