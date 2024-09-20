@@ -66,19 +66,19 @@ const markIncompleteTasks = async () => {
     const now = new Date();
 
     // Use pooled connection here
-    const [tasks] = await pool.execute(
+    const [tasks] = await db.execute(
       'SELECT id, user_id FROM tasks WHERE isCompleted = ? AND DATE(date) = ?',
       ['0', today]
     );
 
     for (const task of tasks) {
-      const [existing] = await pool.execute(
+      const [existing] = await db.execute(
         'SELECT id FROM completed_tasks WHERE task_id = ? AND status = ?',
         [task.id, 'incomplete']
       );
       
       if (existing.length === 0) {
-        await pool.execute(
+        await db.execute(
           'INSERT INTO completed_tasks (task_id, user_id, completed_at, status) VALUES (?, ?, ?, ?)',
           [task.id, task.user_id, now, 'incomplete']
         );
@@ -94,7 +94,7 @@ const markIncompleteTasks = async () => {
 
 
 // Schedule the cron job to run at 11:59 PM every day
-cron.schedule('26 11 * * *', markIncompleteTasks, {
+cron.schedule('29 11 * * *', markIncompleteTasks, {
   timezone: 'Asia/Kolkata', // Specify your timezone
 });
 
