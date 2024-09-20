@@ -6,7 +6,7 @@ import Signin from './components/Pages/Signin';
 import Dashboard from './components/Pages/Dashboard';
 import Home from './components/Users/Home';
 import Tasks from './components/Users/Tasks';
-import Report from './components/Users/Report';
+import Profile from './components/Users/Profile';
 
 const App = () => {
   return (
@@ -19,7 +19,7 @@ const App = () => {
           <Route index element={<Home />} /> 
           <Route path="home" element={<Home />} />
           <Route path="tasks" element={<Tasks />} />
-          <Route path="report" element={<Report />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
       </Routes>
     </Router>

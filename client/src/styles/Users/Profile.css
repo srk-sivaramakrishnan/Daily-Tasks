@@ -1,0 +1,14 @@
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 30%;
+  }
+  
+  .profile-text {
+    font-weight: 700;
+    font-size: 24px; /* Adjust the size as needed */
+    color: #333; /* Adjust color as needed */
+  }
+  

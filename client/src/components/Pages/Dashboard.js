@@ -16,9 +16,6 @@ const Dashboard = () => {
             <Link to={`/dashboard/${id}/tasks`}>Tasks</Link>
           </li>
           <li>
-            <Link to={`/dashboard/${id}/reports`}>Reports</Link>
-          </li>
-          <li>
             <Link to={`/dashboard/${id}/profile`}>Profile</Link>
           </li>
           <li>
